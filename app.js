@@ -3,14 +3,18 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var cors = require('cors');
 const mongoose = require('mongoose');
 const products = require('./routes/products');
-const cors = require('cors')
+
 require('dotenv').config();
 const uri = process.env.MONGO_URI;
-mongoose.Promise = global.Promise;
 
-app.use(cors())
+var app = express(); // Move this line here
+
+// Use cors middleware
+app.use(cors());
+
 
 mongoose.connect(uri)
   .then(() => console.log('connection successfully!'))
@@ -20,6 +24,14 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
+
+mongoose.Promise = global.Promise;
+mongoose.connect(uri)
+  .then(() => console.log('connection successfully!'))
+  .catch((err) => console.error(err))
+
+var indexRouter = require('./routes/index');
+var usersRouter = require('./routes/users');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
